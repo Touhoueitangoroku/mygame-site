@@ -16,36 +16,46 @@
 
   <h1>キャラクター図鑑</h1>
 
-  <table>
+  <table id="characterTable">
     <thead>
       <tr>
         <th>画像</th>
         <th>名前</th>
-        <th>属性</th>
+        <th>HP</th>
         <th>攻撃力</th>
-        <th>スキル名</th>
+        <th>レア</th>
+        <th>スキルPt</th>
+        <th>スキル効果</th>
+        <th>リーダースキル</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td><img src="img/kirisamemarisa.jpg" alt="霧雨魔理沙"></td>
-        <td>霧雨魔理沙</td>
-        <td>V</td>
-        <td>720</td>
-        <td>ファイナルスパーク</td>
-      </tr>
-      <tr>
-        <td><img src="img/reimu.jpg" alt="博麗霊夢"></td>
-        <td>博麗霊夢</td>
-        <td>ALL</td>
-        <td>600</td>
-        <td>夢想封印</td>
-      </tr>
-      <!-- 他キャラもここに追加していけます -->
-    </tbody>
+    <tbody></tbody>
   </table>
 
-  <p><a href="index.html">← トップページに戻る</a></p>
+  <script>
+    // JSON を読み込み
+    fetch("GachaCharacterData.json")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#characterTable tbody");
+        data.forEach(c => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><img src="img/${c.Image}" alt="${c.Name}"></td>
+            <td>${c.Name}</td>
+            <td>${c.BaseHP}</td>
+            <td>${c.BaseAttack}</td>
+            <td>${c.Rare}</td>
+            <td>${c.SkillPoint}</td>
+            <td>${c.SkillDescription}</td>
+            <td>${c.LeaderSkillDescription}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(err => console.error("データ読み込み失敗:", err));
+  </script>
 
+  <p><a href="index.html">← トップページに戻る</a></p>
 </body>
 </html>
