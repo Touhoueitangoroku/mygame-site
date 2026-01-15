@@ -1,0 +1,374 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>攻略情報｜東方英単語録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body{
+      margin:0;
+      background:#0b1020;
+      color:#fff;
+      font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
+      padding:20px;
+    }
+
+    /* ===== グローバルナビ ===== */
+    .site-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .logo{
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#7c5cff,#22d3ee);
+      border-radius:10px;
+      font-weight:700;
+      color:#fff;
+      text-decoration:none;
+    }
+
+    .site-title{
+      font-weight:700;
+      letter-spacing:.05em;
+    }
+
+    .global-nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .global-nav a{
+      padding:6px 10px;
+      border-radius:10px;
+      font-size:14px;
+      color:rgba(255,255,255,.7);
+      text-decoration:none;
+    }
+
+    .global-nav a:hover{
+      background:rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    .global-nav a.active{
+      background:rgba(124,92,255,.25);
+      color:#fff;
+      border:1px solid rgba(124,92,255,.5);
+    }
+
+    h1{
+      margin-bottom:8px;
+    }
+
+    .note{
+      font-size:13px;
+      color:rgba(255,255,255,.65);
+      margin-bottom:24px;
+      line-height:1.7;
+    }
+
+    /* ===== Tier ===== */
+    .tier-section{
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+      max-width:860px;
+      margin:auto;
+    }
+
+    .tier-block{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+      padding:16px;
+    }
+
+    .tier-title{
+      font-size:18px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+
+    .tier-desc{
+      font-size:13px;
+      color:rgba(255,255,255,.7);
+      margin-bottom:12px;
+    }
+
+    .tier-list{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .tier-char{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      width:84px;
+    }
+
+    .tier-char img{
+      width:64px;
+      height:64px;
+      object-fit:contain;
+      border-radius:10px;
+      background:rgba(255,255,255,.08);
+      padding:6px;
+    }
+
+    .tier-char span{
+      font-size:12px;
+      text-align:center;
+    }
+    .tier-badge{
+      height:48px;      /* 実表示サイズ */
+      width:auto;
+      vertical-align:middle;
+    }
+
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- グローバルナビ -->
+  <header class="site-header">
+    <div class="brand">
+      <a href="index.html" class="logo">東</a>
+      <span class="site-title">東方英単語録</span>
+    </div>
+
+    <nav class="global-nav">
+      <a href="index.html#about">概要</a>
+      <a href="news.html">最新情報</a>
+      <a href="guide.html" class="active">攻略情報</a>
+      <a href="characters.html">キャラクター図鑑</a>
+      <a href="board.html">掲示板</a>
+    </nav>
+  </header>
+
+  <h1>攻略情報</h1>
+  <div class="note">
+    ※ 本ページの評価は、運営が想定する一般的な攻略を基準とした「おすすめ度」です。<br>
+    プレイスタイルや手持ちキャラクターによって評価は変わります。
+  </div>
+
+  <!-- ===== Tier表 ===== -->
+  <div class="tier-section">
+
+    <div class="tier-block">
+    <div class="tier-title">
+      <img src="img/tier/tier_sss.png" alt="SSSランク" class="tier-badge">
+      （非常におすすめ）
+    </div>
+  <div class="tier-desc">
+    攻略が安定しやすく、初心者にも扱いやすいキャラクター。
+  </div>
+  <div class="tier-list" id="tier-SSS"></div>
+
+  
+</div>
+
+
+    <div class="tier-block">
+      <div class="tier-title">
+        <img src="img/tier/tier_ss.png" alt="SSランク" class="tier-badge">
+        （おすすめ）
+      </div>
+      <div class="tier-desc">
+        高い性能を持ち、多くの場面で活躍できるキャラクター。
+      </div>
+      <div class="tier-list" id="tier-SS"></div>
+
+      
+</div>
+
+
+    <div class="tier-block">
+    <div class="tier-title">
+          <img src="img/tier/tier_s.png" alt="Sランク" class="tier-badge">
+          （条件次第で強力）
+        </div>      
+    <div class="tier-desc">
+        特定の編成や状況で真価を発揮するキャラクター。
+      </div>
+      <div class="tier-list" id="tier-S"></div>
+
+    </div>
+
+
+  </div>
+
+<script>
+let TIER_TABLE = null;
+
+fetch("data/tier.json")
+  .then(res => res.json())
+  .then(json => {
+    TIER_TABLE = json;
+    initTier();   // ← 既存処理をまとめて呼ぶ
+  });
+
+
+const ATTRIBUTE_ORDER = ["N", "Adj", "Adv", "V", "Rev"];
+</script>
+
+<script>
+function initTier() {
+
+  fetch("data/GachaCharacterData.csv")
+    .then(res => res.text())
+    .then(csv => {
+      const lines = csv.trim().split("\n");
+      const headers = parseCSV(lines[0]).map(h => h.trim());
+      const idx = name => headers.indexOf(name);
+
+      const characters = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const c = parseCSV(lines[i]);
+        characters.push({
+          name: c[idx("Name")],
+          image: c[idx("Image")],
+          rare: Number(c[idx("rare")]),
+          attr: c[idx("Attribute")]
+        });
+      }
+
+      // ★ SSS / SS に含まれるキャラを除外
+      const usedNames = new Set([
+        ...TIER_TABLE.SSS,
+        ...TIER_TABLE.SS
+      ]);
+
+      // ★ 残りを S に自動振り分け
+      const sNames = characters
+        .map(c => c.name)
+        .filter(name => !usedNames.has(name));
+
+      buildTier("SSS", characters);
+      buildTier("SS", characters);
+      buildTierAuto("S", sNames, characters);
+    });
+}
+</script>
+
+
+<script>
+function parseCSV(line) {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') inQuotes = !inQuotes;
+    else if (c === "," && !inQuotes) {
+      result.push(current);
+      current = "";
+    } else {
+      current += c;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+
+  function buildTierAuto(tier, names, characters) {
+  const container = document.getElementById(`tier-${tier}`);
+
+  const tierChars = names
+    .map(name => characters.find(c => c.name === name))
+    .filter(Boolean);
+
+  const sorted = sortByRareAndAttribute(tierChars);
+
+  sorted.forEach(char => {
+    const div = document.createElement("div");
+    div.className = "tier-char";
+
+    div.innerHTML = `
+      <a href="detail.html?name=${encodeURIComponent(char.name)}"
+         style="text-decoration:none;color:inherit;">
+        <img src="img/characters/${char.image}.png" alt="${char.name}">
+        <span>${char.name}</span>
+      </a>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+</script>
+
+<script>
+function buildTier(tier, characters) {
+  const container = document.getElementById(`tier-${tier}`);
+  const names = TIER_TABLE[tier];
+
+  const tierChars = names
+    .map(name => characters.find(c => c.name === name))
+    .filter(Boolean);
+
+  const sorted = sortByRareAndAttribute(tierChars);
+
+  sorted.forEach(char => {
+    const div = document.createElement("div");
+    div.className = "tier-char";
+
+    div.innerHTML = `
+      <a href="detail.html?name=${encodeURIComponent(char.name)}"
+         style="text-decoration:none;color:inherit;">
+        <img src="img/characters/${char.image}.png" alt="${char.name}">
+        <span>${char.name}</span>
+      </a>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+</script>
+
+<script>
+function sortByRareAndAttribute(list) {
+  return list.slice().sort((a, b) => {
+
+    // ① レア度（高い順）
+    if (b.rare !== a.rare) {
+      return b.rare - a.rare;
+    }
+
+    // ② 属性（定義順）
+    return (
+      ATTRIBUTE_ORDER.indexOf(a.attr) -
+      ATTRIBUTE_ORDER.indexOf(b.attr)
+    );
+  });
+}
+</script>
+
+
+
+</body>
+</html>

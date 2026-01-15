@@ -1,0 +1,249 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>最新情報｜東方英単語録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body{
+      margin:0;
+      background:#0b1020;
+      color:#fff;
+      font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
+      padding:20px;
+    }
+
+    /* ===== グローバルナビ ===== */
+    .site-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .logo{
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#7c5cff,#22d3ee);
+      border-radius:10px;
+      font-weight:700;
+      color:#fff;
+      text-decoration:none;
+    }
+
+    .site-title{
+      font-weight:700;
+      letter-spacing:.05em;
+    }
+
+    .global-nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .global-nav a{
+      padding:6px 10px;
+      border-radius:10px;
+      font-size:14px;
+      color:rgba(255,255,255,.7);
+      text-decoration:none;
+    }
+
+    .global-nav a:hover{
+      background:rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    .global-nav a.active{
+      background:rgba(124,92,255,.25);
+      color:#fff;
+      border:1px solid rgba(124,92,255,.5);
+    }
+
+    h1{
+      margin-bottom:20px;
+    }
+
+    /* ===== イベントカード ===== */
+    .event-list{
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+    }
+
+    .event-card{
+      max-width:760px;
+      margin:auto;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      overflow:hidden;
+      background:rgba(255,255,255,.04);
+    }
+
+    .event-banner img{
+      width:100%;
+      height:auto;
+      max-height:320px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .event-body{
+      padding:20px;
+    }
+
+    .event-title{
+      font-size:22px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+
+    .event-period{
+      font-size:14px;
+      color:rgba(255,255,255,.7);
+      margin-bottom:14px;
+    }
+
+    .event-desc{
+      line-height:1.8;
+      margin-bottom:16px;
+      color:rgba(255,255,255,.85);
+    }
+
+    .pickup-group{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .pickup-block{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .pickup-title{
+      font-size:13px;
+      color:rgba(255,255,255,.7);
+      margin-bottom:8px;
+    }
+
+    .pickup{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .pickup img{
+      width:64px;
+      height:64px;
+      object-fit:contain;
+      border-radius:10px;
+      background:rgba(255,255,255,.08);
+      padding:6px;
+    }
+
+    .event-char {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .event-char-name {
+      font-size: 14px;
+      color: #fff;
+      opacity: 0.85;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- グローバルナビ -->
+  <header class="site-header">
+    <div class="brand">
+      <a href="index.html" class="logo">東</a>
+      <span class="site-title">東方英単語録</span>
+    </div>
+
+    <nav class="global-nav">
+      <a href="index.html#about">概要</a>
+      <a href="index.html#howto">遊び方</a>
+      <a href="news.html" class="active">最新情報</a>
+      <a href="guide.html">攻略情報</a>
+      <a href="characters.html">キャラクター図鑑</a>
+      <a href="board.html">掲示板</a>
+      <a href="index.html#contact">問い合わせ</a>
+    </nav>
+  </header>
+
+  <h1>最新情報</h1>
+
+  <!-- イベント一覧 -->
+  <div class="event-list">
+
+    <!-- ▼ イベントカード（新しいものを上に） -->
+    <div class="event-card">
+
+      <div class="event-banner">
+        <img src="img/banners/kakera_harvest.png" alt="めいりんのカケラ収穫祭">
+      </div>
+
+      <div class="event-body">
+        <div class="event-title">めいりんのカケラ収穫祭イベント</div>
+        <div class="event-period">開催期間：2026/02/01 〜 02/10</div>
+
+        <div class="event-desc">
+          クエストをクリアしてめいりんのカケラを大量獲得！<br>
+          限定キャラクター「門番のめいりん」を手に入れよう。
+        </div>
+
+        <div class="pickup-group">
+
+          <div class="pickup-block">
+            <div class="pickup-title">イベントで入手できるキャラクター</div>
+            <div class="pickup">
+            <a href="detail.html?name=門番の美鈴">
+              <img src="img/characters/E.meirin.png" alt="門番の美鈴">
+              <div class="event-char-name">門番の美鈴</div>
+            </a>
+            </div>
+          </div>
+
+          <div class="pickup-block">
+            <div class="pickup-title">新規ガチャ登場キャラクター</div>
+            <div class="pickup">
+            <a href="detail.html?name=紅月のレミリア">
+              <img src="img/characters/E.remiria.png" alt="紅月のレミリア">
+              <div class="event-char-name">紅月のレミリア</div>
+            </a>
+            <a href="detail.html?name=日陰の少女パチュリー">
+              <img src="img/characters/E.patyuri.png" alt="日陰の少女パチュリー">
+              <div class="event-char-name">日陰の少女パチュリー</div>
+            </a>            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
