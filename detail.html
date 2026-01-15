@@ -294,7 +294,7 @@
   const params = new URLSearchParams(location.search);
   const charName = params.get("name");
 
-  fetch("../data/GachaCharacterData.csv")
+  fetch("../data/gachaCharacterData.csv")
     .then(res => res.text())
     .then(csv => {
       const lines = csv.trim().split("\n");
