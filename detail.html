@@ -185,6 +185,7 @@
     <a href="../guide.html">攻略情報</a>
     <a href="../characters.html">キャラクター図鑑</a>
   </nav>
+  <a href="characters.html">← キャラクター図鑑へ戻る</a>
 </header>
 
 <main class="container">
@@ -259,18 +260,18 @@
 
   // ===== 属性アイコン定義 =====
   const ATTRIBUTE_MAP = {
-    N:   { label: "名詞", icon: "../img/attribute/N.png" },
-    Adj: { label: "形容詞", icon: "../img/attribute/Adj.png" },
-    Adv: { label: "副詞", icon: "../img/attribute/Adv.png" },
-    V:   { label: "動詞", icon: "../img/attribute/V.png" },
-    Rev: { label: "反転動詞", icon: "../img/attribute/Rev.png" }
+    N:   { label: "名詞", icon: "/img/attribute/N.png" },
+    Adj: { label: "形容詞", icon: "/img/attribute/Adj.png" },
+    Adv: { label: "副詞", icon: "/img/attribute/Adv.png" },
+    V:   { label: "動詞", icon: "/img/attribute/V.png" },
+    Rev: { label: "反転動詞", icon: "/img/attribute/Rev.png" }
   };
 
   function renderTierBadge(tier){
     const map = {
-      SSS: "../img/tier/tier_sss.png",
-      SS:  "../img/tier/tier_ss.png",
-      S:   "../img/tier/tier_s.png"
+      SSS: "/img/tier/tier_sss.png",
+      SS:  "/img/tier/tier_ss.png",
+      S:   "/img/tier/tier_s.png"
     };
     return `<img src="${map[tier]}" alt="${tier}ランク" class="tier-badge">`;
   }
@@ -294,7 +295,7 @@
   const params = new URLSearchParams(location.search);
   const charName = params.get("name");
 
-  fetch("../data/GachaCharacterData.csv")
+  fetch("/data/GachaCharacterData.csv")
     .then(res => res.text())
     .then(csv => {
       const lines = csv.trim().split("\n");
@@ -318,14 +319,14 @@
 
           document.getElementById("charImg").src =
             image2 && image2 !== ""
-              ? `../img/characterImages2/${image2}.png`
-              : `../img/characters/${image1}.png`;
+              ? `/img/characterImages2/${image2}.png`
+              : `/img/characters/${image1}.png`;
 
           document.getElementById("charSub").innerHTML =
             `★${c[idx("rare")]} / ${renderAttributeIcon(c[idx("Attribute")])}`;
 
           // ===== Tier評価を適用 =====
-          fetch("../data/tier.json")
+          fetch("/data/tier.json")
             .then(res => res.json())
             .then(tierData => {
 
