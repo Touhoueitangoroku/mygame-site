@@ -230,24 +230,36 @@
     }
 
     function renderTable() {
-      const tbody = document.querySelector("#charTable tbody");
-      tbody.innerHTML = "";
+    const tbody = document.querySelector("#charTable tbody");
+    tbody.innerHTML = "";
 
-      for (const c of characters) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><img src="img/characters/${c.image}.png" alt=""></td>
-          <td>${c.name}</td>
-          <td>★${c.rare}</td>
-          <td>${renderAttribute(c.attr)}</td>
-          <td>${c.hp}</td>
-          <td>${c.atk}</td>
-          <td class="skill">${c.skill}</td>
-          <td class="skill">${c.leader}</td>
-        `;
-        tbody.appendChild(tr);
-      }
+    for (const c of characters) {
+      const url =
+        `detail.html?name=${encodeURIComponent(c.name)}`;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>
+          <a href="${url}">
+            <img src="img/characters/${c.image}.png" alt="${c.name}">
+          </a>
+        </td>
+        <td>
+          <a href="${url}" style="color:#22d3ee; text-decoration:none;">
+            ${c.name}
+          </a>
+        </td>
+        <td>★${c.rare}</td>
+        <td>${renderAttribute(c.attr)}</td>
+        <td>${c.hp}</td>
+        <td>${c.atk}</td>
+        <td class="skill">${c.skill}</td>
+        <td class="skill">${c.leader}</td>
+      `;
+      tbody.appendChild(tr);
     }
+  }
+
 
     fetch("data/GachaCharacterData.csv")
       .then(res => res.text())

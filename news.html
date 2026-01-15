@@ -154,6 +154,21 @@
       background:rgba(255,255,255,.08);
       padding:6px;
     }
+
+    .event-char {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .event-char-name {
+      font-size: 14px;
+      color: #fff;
+      opacity: 0.85;
+    }
+
   </style>
 </head>
 
@@ -203,16 +218,24 @@
           <div class="pickup-block">
             <div class="pickup-title">イベントで入手できるキャラクター</div>
             <div class="pickup">
-              <img src="img/characters/E.meirin.png" alt="門番のめいりん">
+            <a href="detail.html?name=門番の美鈴">
+              <img src="img/characters/E.meirin.png" alt="門番の美鈴">
+              <div class="event-char-name">門番の美鈴</div>
+            </a>
             </div>
           </div>
 
           <div class="pickup-block">
             <div class="pickup-title">新規ガチャ登場キャラクター</div>
             <div class="pickup">
+            <a href="detail.html?name=紅月のレミリア">
               <img src="img/characters/E.remiria.png" alt="紅月のレミリア">
+              <div class="event-char-name">紅月のレミリア</div>
+            </a>
+            <a href="detail.html?name=日陰の少女パチュリー">
               <img src="img/characters/E.patyuri.png" alt="日陰の少女パチュリー">
-            </div>
+              <div class="event-char-name">日陰の少女パチュリー</div>
+            </a>            </div>
           </div>
 
         </div>
