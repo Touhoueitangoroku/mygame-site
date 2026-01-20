@@ -176,14 +176,14 @@
 
 <header class="site-header">
   <div class="brand">
-    <a href="../index.html" class="logo">東</a>
+    <a href="index.html" class="logo">東</a>
     <span class="site-title">東方英単語録</span>
   </div>
 
   <nav class="global-nav">
-    <a href="../news.html">最新情報</a>
-    <a href="../guide.html">攻略情報</a>
-    <a href="../characters.html">キャラクター図鑑</a>
+    <a href="news.html">最新情報</a>
+    <a href="guide.html">攻略情報</a>
+    <a href="characters.html">キャラクター図鑑</a>
   </nav>
   <a href="characters.html">← キャラクター図鑑へ戻る</a>
 </header>
@@ -295,7 +295,7 @@
   const params = new URLSearchParams(location.search);
   const charName = params.get("name");
 
-  fetch("/data/GachaCharacterData.csv")
+  fetch("data/GachaCharacterData.csv")
     .then(res => res.text())
     .then(csv => {
       const lines = csv.trim().split("\n");
@@ -326,7 +326,7 @@
             `★${c[idx("rare")]} / ${renderAttributeIcon(c[idx("Attribute")])}`;
 
           // ===== Tier評価を適用 =====
-          fetch("/data/tier.json")
+          fetch("data/tier.json")
             .then(res => res.json())
             .then(tierData => {
 
