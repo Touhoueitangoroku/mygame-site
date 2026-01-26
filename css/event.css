@@ -1,0 +1,147 @@
+/* ===== 共通変数（index.html から移植） ===== */
+:root{
+  --bg: #0b1020;
+  --card: rgba(255,255,255,.06);
+  --border: rgba(255,255,255,.12);
+  --text: rgba(255,255,255,.88);
+  --muted: rgba(255,255,255,.68);
+  --accent: #7c5cff;
+  --accent2:#22d3ee;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 16px;
+}
+
+/* ===== ページ全体 ===== */
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 10% 10%, rgba(124,92,255,.25), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(34,211,238,.18), transparent 60%),
+    radial-gradient(900px 700px at 50% 90%, rgba(255,255,255,.06), transparent 60%),
+    var(--bg);
+  min-height:100vh;
+}
+
+/* ===== コンテナ ===== */
+.event-container{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 18px 48px;
+}
+
+/* ===== ヘッダー ===== */
+.site-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:10px;
+  font-weight:700;
+  color:#fff;
+  text-decoration:none;
+}
+
+.global-nav a{
+  margin-left:10px;
+  padding:6px 10px;
+  border-radius:10px;
+  color:var(--muted);
+  text-decoration:none;
+}
+
+.global-nav a:hover{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+/* ===== イベントカード ===== */
+.event-card{
+  max-width:760px;
+  margin:0 auto 32px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.event-banner img{
+  width:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.event-body{
+  padding:20px;
+}
+
+.event-title{
+  font-size:22px;
+  font-weight:700;
+}
+
+.event-period{
+  font-size:14px;
+  color:var(--muted);
+  margin:6px 0 12px;
+}
+
+.event-desc{
+  line-height:1.8;
+  color:var(--text);
+}
+
+/* ===== タグ ===== */
+.event-tags{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+}
+
+.tag{
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+
+.tag-permanent{
+  background:rgba(124,92,255,.25);
+  color:#fff;
+}
+
+.tag-beginner{
+  background:rgba(34,211,238,.25);
+  color:#fff;
+}
+
+/* ===== セクション ===== */
+.event-section{
+  max-width:760px;
+  margin:24px auto;
+  padding:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+
+.event-section h2{
+  margin-top:0;
+}
