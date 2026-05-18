@@ -41,12 +41,13 @@
       display:flex; align-items:center; gap:12px;
     }
     .logo{
-      width:44px; height:44px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(34,211,238,.85));
-      box-shadow: var(--shadow);
-      display:grid; place-items:center;
-      font-weight:700;
-    }
+  width:44px;
+  height:44px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  object-fit: cover;
+  display: block;
+}
     nav{ display:flex; gap:14px; flex-wrap:wrap; }
     nav a{
       padding: 8px 10px;
@@ -195,7 +196,7 @@
     </div>
     <header>
       <div class="brand">
-        <div class="logo">東</div>
+        <img class="logo" src="img/logo/512.png" alt="東方英単語録ロゴ">
         <div>
           <div style="font-weight:700; letter-spacing:.02em;">東方英単語録</div>
           <div style="font-size:13px; color:rgba(255,255,255,.65);">公式サイト / ガイド</div>
@@ -212,38 +213,18 @@
     </header>
 
     <section class="hero">
-      <h1>プレイしていたら、英単語がいつの間にか身についていた。</h1>
-      <p>
-        「東方英単語録」は、クイズ×バトルで英単語を身につけるモバイルゲームです。
-        間違えた問題は復習クエストで再挑戦でき、学習がゲーム体験に自然に溶け込みます。
-      </p>
+  <h1>東方英単語録攻略サイト</h1>
 
-      <div class="badges">
-        <span class="badge"><span class="dot"></span> クイズ×RPG</span>
-        <span class="badge">復習クエスト対応</span>
-        <span class="badge">スマホ向け</span>
-      </div>
+  <div class="cta">
+    <a class="btn primary" href="news.html">最新情報を見る</a>
+    <a class="btn" href="privacy.html">プライバシーポリシー</a>
+  </div>
 
-      <div class="cta">
-        <a class="btn primary" href="news.html">最新情報を見る</a>
-        <a class="btn" href="privacy.html">プライバシーポリシー</a>
-      </div>
-
-      <div class="notice">
-        ※このページは GitHub Pages で公開しています
-      </div>
-    </section>
+  <div class="notice">
+    ※このページは GitHub Pages で公開しています
+  </div>
 
 
-    <section class="card">
-  <!-- 🚨 緊急メンテナンス告知バナー -->
-<div class="maintenance-banner" style="
-  background: linear-gradient(135deg, rgba(34,197,94,.95), rgba(22,163,74,.9));
-">
-  <strong>【復旧のお知らせ】</strong><br>
-  不具合は解消され、現在は正常にプレイいただけます。<br>
-  ご不便をおかけしましたことをお詫び申し上げます。
-</div>
 
 
   <h2>最新情報</h2>
