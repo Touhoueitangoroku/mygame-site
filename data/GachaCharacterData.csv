@@ -41,3 +41,5 @@
 四季映姫・ヤマザナドゥ,701,1814,Adj,Ex.sikieiki,Ex.sikieiki2,6,Sk.Ex.sikieiki,EventD,3,1ターンの間、選択肢を2択に変更,全体の攻撃力4.0倍、不正解時にパーティーの体力-20%
 神隠しの紫,1313,1161,Adj,E.yukari,E.yukari2,5,Sk.E.yukari,YoumuHarvest,5,同属性の攻撃を2連撃化,パーティ―全体に連撃による気絶効果付与（連撃が多いほど気絶確率上昇）
 幽霊少女の幽々子,1929,559,Rev,E.yuyuko,E.yuyuko2,6,Sk.E.yuyuko,YoumuHarvest,9,3ターン後に味方パーティーをすべて蘇生させる,全体の体力を1.4倍、正解時にパーティー全体を4%回復
+霧湖の大妖精,525,1444,Adv,E.daiyousei,E.daiyousei2,5,Sk.E.daiyousei,DropEv1,4,自分の攻撃力を4倍,同属性の攻撃力を2.5倍
+宵闇のルーミア,1260,1319,V,E.rumia,E.rumia2,6,Sk.E.rumia,DropEv1,2,クイズ選択パネルをすべて黄色属性に変換,全体の体力1.3倍、攻撃力1.3倍、正解時にパーティー全体を3%回復
