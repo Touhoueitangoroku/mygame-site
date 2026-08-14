@@ -25,6 +25,7 @@ except AttributeError:
 BASE_DIR = Path(__file__).resolve().parent
 CSV_PATH = BASE_DIR / "data" / "GachaCharacterData.csv"
 TIER_JSON_PATH = BASE_DIR / "data" / "tier.json"
+EVENTS_JSON_PATH = BASE_DIR / "data" / "events.json"
 CHAR_IMG_DIR = BASE_DIR / "img" / "characters"
 CHAR_IMG2_DIR = BASE_DIR / "img" / "characterImages2"
 BANNER_DIR = BASE_DIR / "img" / "banners"
@@ -35,10 +36,26 @@ REQUIRED_FIELDS = [
     "Image", "Image2", "rare", "スキル文章", "リーダースキル文章",
 ]
 
+# events.json の必須項目（id/type/title/periodText/banner/description）
+EVENT_REQUIRED_FIELDS = ["id", "type", "title", "periodText", "banner", "description"]
+
+# events.json の type に許可する値。今後種別を増やす場合はここに追加する。
+EVENT_TYPE_CHOICES = {
+    "event",
+    "drop_event",
+    "harvest_event",
+    "gacha",
+    "login_bonus",
+    "campaign",
+    "stage_release",
+    "schedule",
+}
+
 HTML_FILES_FOR_BANNERS = ["index.html", "news.html"]  # events/*.html は別途 glob で追加
 HTML_FILES_FOR_EVENT_LINKS = ["index.html", "news.html"]
 
 SRC_ATTR_RE = re.compile(r'''(?:src|href)\s*=\s*["']([^"']+)["']''', re.IGNORECASE)
+EVENT_DATE_RE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 
 
 class Report:
@@ -255,12 +272,18 @@ def check_banners(report):
         report.warning("Unused banner images (img/banners/)", items)
 
 
-def is_template(filename):
-    return "template" in filename.lower()
-
-
 def check_event_links(report):
-    linked_targets = set()
+    # 静的HTML（index.html/news.html）に書かれた events/*.html へのリンクが
+    # 実在するかどうかだけを検証する。
+    #
+    # 正式管理イベント（data/events.json に登録され detailPage を持つもの）の
+    # リンク切れは check_events() 側で検証する。
+    #
+    # events/*.html に実在するがどこからも静的リンクされていないページを
+    # 「孤立」として警告する判定はここでは行わない。news.html は
+    # data/events.json を正本として JavaScript がリンクを動的生成する運用に
+    # なっており、events.json に未登録の旧イベントページは過去URL維持のための
+    # 意図的なアーカイブであって異常ではないため。
     broken = []
 
     for name in HTML_FILES_FOR_EVENT_LINKS:
@@ -278,7 +301,6 @@ def check_event_links(report):
             if not m:
                 continue
             target_name = m.group(1)
-            linked_targets.add(target_name)
             target_path = EVENTS_DIR / target_name
             if not target_path.exists():
                 broken.append([
@@ -292,12 +314,217 @@ def check_event_links(report):
     else:
         report.passed("Event page links (index.html / news.html)")
 
-    if EVENTS_DIR.exists():
-        all_event_pages = {p.name for p in EVENTS_DIR.glob("*.html")}
-        real_pages = {n for n in all_event_pages if not is_template(n)}
-        orphan_pages = sorted(real_pages - linked_targets)
-        items = [[f"  - events/{name}"] for name in orphan_pages]
-        report.warning("Orphan event pages (not linked from index.html/news.html)", items)
+
+def load_events():
+    """events.json を読み込み、(events, error_message) を返す。JSON自体は書き換えない。"""
+    if not EVENTS_JSON_PATH.exists():
+        return None, f"events.json が見つかりません: {EVENTS_JSON_PATH}"
+
+    import json
+    try:
+        with open(EVENTS_JSON_PATH, "r", encoding="utf-8-sig") as f:
+            data = json.load(f)
+    except Exception as e:
+        return None, f"events.json の読み込みに失敗しました: {e}"
+
+    if not isinstance(data, list):
+        return None, "events.json のトップレベルは配列（リスト）である必要があります"
+
+    return data, None
+
+
+def event_label(event, index):
+    eid = event.get("id") if isinstance(event, dict) else None
+    if isinstance(eid, str) and eid.strip():
+        return eid.strip()
+    return f"(id未設定・events.json {index}番目の要素)"
+
+
+def is_blank(value):
+    return value is None or (isinstance(value, str) and value.strip() == "")
+
+
+def parse_event_date(value):
+    """YYYY-MM-DD として実在する日付かどうかを検証する。不正なら None を返す。"""
+    if not isinstance(value, str) or not EVENT_DATE_RE.match(value):
+        return None
+    from datetime import date
+    y, m, d = (int(x) for x in value.split("-"))
+    try:
+        return date(y, m, d)
+    except ValueError:
+        return None  # 例: 2026-02-30 のような実在しない日付
+
+
+def check_events(report):
+    events, load_error = load_events()
+
+    if load_error:
+        report.error("Event data loaded (data/events.json)", [[f"  - {load_error}"]])
+        return  # events.json が読めない場合でもこの関数を抜けるだけで他のチェックは継続する
+
+    report.passed("Event data loaded (data/events.json)")
+
+    labels = [event_label(e, i) for i, e in enumerate(events)]
+
+    # ID重複チェック
+    ids = [
+        e.get("id").strip() for e in events
+        if isinstance(e, dict) and isinstance(e.get("id"), str) and e.get("id").strip()
+    ]
+    dup_ids = sorted({eid for eid, cnt in Counter(ids).items() if cnt > 1})
+    if dup_ids:
+        report.error("Duplicate event IDs", [[f"  - {eid}"] for eid in dup_ids])
+    else:
+        report.passed("Event IDs are unique")
+
+    # 必須項目チェック（id/type/title/periodText/banner/description）
+    missing_items = []
+    for label, event in zip(labels, events):
+        if not isinstance(event, dict):
+            missing_items.append([f"  - {label}: イベントがオブジェクト（辞書）ではありません"])
+            continue
+        for field in EVENT_REQUIRED_FIELDS:
+            if is_blank(event.get(field)):
+                missing_items.append([f"  - {label}: {field} is empty"])
+    if missing_items:
+        report.error("Event required fields", missing_items)
+    else:
+        report.passed("Event required fields")
+
+    # type の許可値チェック
+    bad_type_items = []
+    for label, event in zip(labels, events):
+        if not isinstance(event, dict):
+            continue
+        t = event.get("type")
+        if is_blank(t):
+            continue  # 必須項目チェックで報告済み
+        if t not in EVENT_TYPE_CHOICES:
+            bad_type_items.append([
+                f"  - {label}",
+                f"    type: {t!r}",
+                f"    allowed: {', '.join(sorted(EVENT_TYPE_CHOICES))}",
+            ])
+    if bad_type_items:
+        report.error("Event types", bad_type_items)
+    else:
+        report.passed("Event types")
+
+    # start / end の日付チェック
+    # ・両方なし → PASS（例: 開催時期未定のイベント）
+    # ・片方だけ → ERROR（不完全な期間情報）
+    # ・両方あり → YYYY-MM-DD として実在する日付か、start <= end か検証
+    date_items = []
+    for label, event in zip(labels, events):
+        if not isinstance(event, dict):
+            continue
+        has_start = "start" in event and not is_blank(event.get("start"))
+        has_end = "end" in event and not is_blank(event.get("end"))
+
+        if not has_start and not has_end:
+            continue
+
+        if has_start != has_end:
+            date_items.append([
+                f"  - {label}",
+                f"    start: {event.get('start')!r}",
+                f"    end: {event.get('end')!r}",
+                "    reason: start と end は両方揃っている必要があります",
+            ])
+            continue
+
+        start_raw, end_raw = event.get("start"), event.get("end")
+        start_date = parse_event_date(start_raw)
+        end_date = parse_event_date(end_raw)
+
+        if start_date is None or end_date is None:
+            date_items.append([
+                f"  - {label}",
+                f"    start: {start_raw!r}",
+                f"    end: {end_raw!r}",
+                "    reason: YYYY-MM-DD形式の実在する日付ではありません",
+            ])
+        elif start_date > end_date:
+            date_items.append([
+                f"  - {label}",
+                f"    start: {start_raw}",
+                f"    end: {end_raw}",
+                "    reason: start が end より後になっています",
+            ])
+
+    if date_items:
+        report.error("Event dates", date_items)
+    else:
+        report.passed("Event dates")
+
+    # banner の存在チェック（img/ 側のファイル移動・リネームは今回行わない）
+    banner_items = []
+    for label, event in zip(labels, events):
+        if not isinstance(event, dict):
+            continue
+        banner = event.get("banner")
+        if is_blank(banner) or not isinstance(banner, str):
+            continue  # 必須項目チェックで報告済み
+        if not (BASE_DIR / banner).exists():
+            banner_items.append([
+                f"  - {label}",
+                f"    banner: {banner}",
+            ])
+    if banner_items:
+        report.error("Event banners", banner_items)
+    else:
+        report.passed("Event banners")
+
+    # detailPage の存在チェック（任意項目）＋ 同一detailPageの重複参照チェック
+    detail_page_items = []
+    detail_page_owners = {}
+    for label, event in zip(labels, events):
+        if not isinstance(event, dict):
+            continue
+        dp = event.get("detailPage")
+        if dp is None or (isinstance(dp, str) and dp.strip() == ""):
+            continue  # detailPage は任意項目
+        if not isinstance(dp, str):
+            detail_page_items.append([f"  - {label}: detailPage is not a string"])
+            continue
+        if not (BASE_DIR / dp).exists():
+            detail_page_items.append([
+                f"  - {label}",
+                f"    detailPage: {dp}",
+            ])
+        detail_page_owners.setdefault(dp, []).append(label)
+
+    for dp, owners in detail_page_owners.items():
+        if len(owners) > 1:
+            detail_page_items.append([
+                f"  - {dp}",
+                f"    referenced by: {', '.join(owners)}",
+            ])
+
+    if detail_page_items:
+        report.error("Event detail pages", detail_page_items)
+    else:
+        report.passed("Event detail pages")
+
+    # tags の形式チェック（任意項目。配列かつ全要素が文字列であること）
+    tags_items = []
+    for label, event in zip(labels, events):
+        if not isinstance(event, dict):
+            continue
+        if "tags" not in event:
+            continue  # tags は任意項目
+        tags = event.get("tags")
+        if not isinstance(tags, list):
+            tags_items.append([f"  - {label}: tags is not an array ({tags!r})"])
+            continue
+        non_strings = [t for t in tags if not isinstance(t, str)]
+        if non_strings:
+            tags_items.append([f"  - {label}: tags contains non-string values ({non_strings!r})"])
+    if tags_items:
+        report.error("Event tags", tags_items)
+    else:
+        report.passed("Event tags")
 
 
 def main():
@@ -325,6 +552,8 @@ def main():
     check_banners(report)
     report.blank()
     check_event_links(report)
+    report.blank()
+    check_events(report)
 
     print(report.render())
     print()

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "august_schedule_2026",
+    "type": "schedule",
+    "title": "2026年8月イベントスケジュール",
+    "periodText": "対象期間：2026年8月3日 ～ 8月31日",
+    "start": "2026-08-03",
+    "end": "2026-08-31",
+    "banner": "img/banners/EventSchedule202608.png",
+    "detailPage": "events/august_schedule_2026.html",
+    "description": "8月3日～8月31日のイベント予定を公開しました。"
+  },
+  {
+    "id": "keine_drop_event",
+    "type": "drop_event",
+    "title": "半分先生？半分妖獣？",
+    "periodText": "開催期間：2026年8月3日（月）～8月16日（日）",
+    "start": "2026-08-03",
+    "end": "2026-08-16",
+    "banner": "img/banners/Event13.png",
+    "detailPage": "events/keine_drop_event.html",
+    "description": "初心者応援イベントとして、1日1回挑戦できるイベントクエストが登場します。クエストをクリアすると☆6「寺子屋の慧音」が100％確定でドロップします。すでに「寺子屋の慧音」を所持している場合は、結晶に変換されます。",
+    "tags": ["初心者向け", "期間限定", "ドロップイベント", "限定キャラ"]
+  },
+  {
+    "id": "rumia_drop_event",
+    "type": "drop_event",
+    "title": "辺りが暗くなるそれまでに",
+    "periodText": "開催期間：6/27（土）12:00 ～ 7/4（土）12:00",
+    "banner": "img/banners/Event12.png",
+    "detailPage": "events/rumia_drop_event.html",
+    "description": "宵闇のルーミアが超低確率でドロップする期間限定イベントクエストです。高難易度ほど限定キャラクターのドロップ率が上昇します。パーティーを強化して、高難易度の制覇を目指しましょう。",
+    "tags": ["期間限定", "ドロップイベント", "高難易度", "限定キャラ"]
+  }
+]

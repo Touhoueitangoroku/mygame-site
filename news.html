@@ -192,270 +192,101 @@
 
   <h1>最新情報</h1>
 
-  <div class="event-list">
+  <div class="event-list" id="event-list"></div>
 
-    <!-- 8月イベントスケジュール -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/august_schedule_2026.html">
-        <img src="img/banners/EventSchedule202608.png" alt="8月イベントスケジュール">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">8月イベントスケジュール</div>
-      <div class="event-period">対象期間：2026年8月3日 ～ 8月31日</div>
-      <div class="event-desc">
-        8月3日～8月31日のイベント予定を公開しました。
-      </div>
-      <a href="events/august_schedule_2026.html">▶ イベントカレンダーを見る</a>
-    </div>
-  </div>
+  <script>
+    // news.html のイベント一覧は data/events.json を正本として描画する。
+    // 表示順は events.json の配列順をそのまま採用する（自動並び替えはしない）。
+    (function () {
+      const listEl = document.getElementById("event-list");
 
-    <!-- 半分先生？半分妖獣？ -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/keine_drop_event.html">
-        <img src="img/banners/Event13.png" alt="半分先生？半分妖獣？">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">半分先生？半分妖獣？</div>
-      <div class="event-period">開催期間：未定</div>
-      <div class="event-desc">
-        初心者応援イベント。1日1回クエストをクリアすると☆6「寺子屋の慧音」が100％確定でドロップします。
-        所持済みの場合は結晶に変換されます。
-      </div>
-      <a href="events/keine_drop_event.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+      function showMessage(text) {
+        listEl.innerHTML = "";
+        const p = document.createElement("p");
+        p.style.color = "rgba(255,255,255,.7)";
+        p.style.textAlign = "center";
+        p.textContent = text;
+        listEl.appendChild(p);
+      }
 
-        <!-- 辺りが暗くなるそれまでに -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/rumia_drop_event.html">
-        <img src="img/banners/Event12.png" alt="辺りが暗くなるそれまでに">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">辺りが暗くなるそれまでに</div>
-      <div class="event-period">開催期間：6/27（土）12:00 ～ 7/4（土）12:00</div>
-      <div class="event-desc">
-        宵闇のルーミアが超低確率でドロップする期間限定イベントクエストです。
-        高難易度を制覇して、限定キャラクターの獲得を目指しましょう。
-      </div>
-      <a href="events/rumia_drop_event.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
-    <!-- 収穫祭ガチャ第二弾開催 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/harvest_gacha2.html">
-        <img src="img/banners/Ev_Gacha_Harvest2.png" alt="収穫祭ガチャ第二弾開催">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">収穫祭ガチャ第二弾開催</div>
-      <div class="event-period">開催期間：近日開催予定</div>
-      <div class="event-desc">
-        収穫祭ガチャ第二弾が期間限定で登場予定です。
-        新たなピックアップキャラクターを仲間にして、クエスト攻略やパーティー編成の幅を広げましょう。
-      </div>
-      <a href="events/harvest_gacha2.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+      function detailLinkLabel(type) {
+        return type === "schedule" ? "▶ イベントカレンダーを見る" : "▶ イベント詳細を見る";
+      }
 
-    <!-- 花映塚ガチャ開催 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/kaeiduka_gacha.html">
-        <img src="img/banners/kaeiduka_gacha.png" alt="花映塚ガチャ開催">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">花映塚ガチャ開催</div>
-      <div class="event-period">開催期間：近日開催予定</div>
-      <div class="event-desc">
-        東方花映塚のキャラクターたちがピックアップされた期間限定ガチャが開催予定です。
-        新たな仲間を迎えて、パーティーをさらに強化しましょう。
-      </div>
-      <a href="events/kaeiduka_gacha.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+      function buildEventCard(ev) {
+        const card = document.createElement("div");
+        card.className = "event-card";
+        if (ev.id) card.setAttribute("data-event-id", ev.id);
+        if (ev.type) card.setAttribute("data-type", ev.type);
+        if (Array.isArray(ev.tags) && ev.tags.length > 0) {
+          card.setAttribute("data-tags", ev.tags.join(","));
+        }
 
-  <!-- 初心者応援イベント -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/beginner.html">
-        <img src="img/banners/beginner.png" alt="初心者応援イベント">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">初心者応援イベント</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        ゲームを始めたばかりのプレイヤー向けの応援イベントです。
-        クエストや報酬を活用して、スムーズに冒険を始めましょう。
-      </div>
-      <a href="events/beginner.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        const hasDetail = typeof ev.detailPage === "string" && ev.detailPage.trim() !== "";
 
-  <!-- めいりんの収穫祭 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/meirinharvest.html">
-        <img src="img/banners/kakera_harvest.png" alt="めいりんの収穫祭">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">めいりんの収穫祭</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        クエストをクリアして、めいりんのカケラを大量に獲得できるイベントです。
-      </div>
-      <a href="events/meirinharvest.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        const bannerWrap = document.createElement("div");
+        bannerWrap.className = "event-banner";
+        const img = document.createElement("img");
+        img.src = ev.banner;
+        img.alt = ev.title || "";
+        if (hasDetail) {
+          const bannerLink = document.createElement("a");
+          bannerLink.href = ev.detailPage;
+          bannerLink.appendChild(img);
+          bannerWrap.appendChild(bannerLink);
+        } else {
+          bannerWrap.appendChild(img);
+        }
+        card.appendChild(bannerWrap);
 
-  <!-- 魔理沙の収穫祭 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/kirisamemarisaharvest.html">
-        <img src="img/banners/kakera_harvest2.png" alt="魔理沙の収穫祭">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">魔理沙の収穫祭</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        魔理沙のカケラを集めて、育成に役立てよう！
-      </div>
-      <a href="events/kirisamemarisaharvest.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        const body = document.createElement("div");
+        body.className = "event-body";
 
-  <!-- 妖夢の収穫祭 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/konpakuyoumuharvest.html">
-        <img src="img/banners/kakera_harvest3.png" alt="妖夢の収穫祭">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">妖夢の収穫祭</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        妖夢のカケラを獲得できる収穫祭イベントです。
-      </div>
-      <a href="events/konpakuyoumuharvest.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        const title = document.createElement("div");
+        title.className = "event-title";
+        title.textContent = ev.title || "";
+        body.appendChild(title);
 
-  <!-- 紅魔郷ステージ追加 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/koumakyou_stage.html">
-        <img src="img/banners/koumakyou_stage.png" alt="紅魔郷ステージ追加">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">紅魔郷ステージ追加</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        紅魔郷ステージが新たに追加されました。
-      </div>
-      <a href="events/koumakyou_stage.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        const period = document.createElement("div");
+        period.className = "event-period";
+        period.textContent = ev.periodText || "";
+        body.appendChild(period);
 
-  <!-- 妖々夢ステージ追加 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/youyoumu_stage.html">
-        <img src="img/banners/youyoumu_stage.png" alt="妖々夢ステージ追加">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">妖々夢ステージ追加</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        妖々夢の世界を舞台にした新ステージが登場！
-      </div>
-      <a href="events/youyoumu_stage.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        const desc = document.createElement("div");
+        desc.className = "event-desc";
+        desc.textContent = ev.description || "";
+        body.appendChild(desc);
 
-  <!-- ヴワル魔法図書館の試練 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/vwal_library_trial.html">
-        <img src="img/banners/vwal_library_trial.png" alt="ヴワル魔法図書館の試練">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">ヴワル魔法図書館の試練</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        強化素材を大量に獲得できる高効率イベントクエストです。
-      </div>
-      <a href="events/vwal_library_trial.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        if (hasDetail) {
+          const link = document.createElement("a");
+          link.href = ev.detailPage;
+          link.textContent = detailLinkLabel(ev.type);
+          body.appendChild(link);
+        }
 
-  <!-- 魔理沙の実験協力 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/marisa_experiment_cooperation.html">
-        <img src="img/banners/marisa_experiment.png" alt="魔理沙の実験協力">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">魔理沙の実験協力</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        1日1回挑戦できる特別クエスト。
-        クリアするとミニ八卦炉を獲得できます。
-      </div>
-      <a href="events/marisa_experiment_cooperation.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
+        card.appendChild(body);
+        return card;
+      }
 
-  <!-- 固有アイテム交換所 -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/unique_item_exchange.html">
-        <img src="img/banners/unique_item_exchange.png" alt="固有アイテム交換所">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">固有アイテム交換所</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        固有アイテムをミニ八卦炉50個と交換できる常設交換所です。
-      </div>
-      <a href="events/unique_item_exchange.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
-
-  <!-- ログインボーナス -->
-  <div class="event-card">
-    <div class="event-banner">
-      <a href="events/login_bonus_2026_01.html">
-        <img src="img/banners/login_bonus.png" alt="ログインボーナス">
-      </a>
-    </div>
-    <div class="event-body">
-      <div class="event-title">ログインボーナス（2026年1月）</div>
-      <div class="event-period">開催期間：2026/01/26 ～ 2026/02/26</div>
-      <div class="event-desc">
-        期間中にログインするだけで、豪華報酬を獲得できます。
-      </div>
-      <a href="events/login_bonus_2026_01.html">▶ イベント詳細を見る</a>
-    </div>
-  </div>
-
-</div>
-
+      fetch("data/events.json")
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((events) => {
+          if (!Array.isArray(events) || events.length === 0) {
+            showMessage("現在、表示できる最新情報はありません。");
+            return;
+          }
+          listEl.innerHTML = "";
+          events.forEach((ev) => listEl.appendChild(buildEventCard(ev)));
+        })
+        .catch((err) => {
+          console.error("イベント情報の読み込みに失敗しました:", err);
+          showMessage("最新情報を読み込めませんでした。");
+        });
+    })();
+  </script>
 
 </body>
 </html>
