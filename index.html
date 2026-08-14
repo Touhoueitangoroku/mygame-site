@@ -229,16 +229,10 @@
 
   <h2>最新情報</h2>
 
-  <ul>
-    <li>
-      <strong>2026/02/01</strong><br>
-      めいりんのカケラ収穫祭イベント開催！
-    </li>
-    <li>
-      <strong>2026/01/20</strong><br>
-      紅月のレミリア / 日陰の少女パチュリー登場
-    </li>
-  </ul>
+  <ul id="latest-news-list"></ul>
+  <noscript>
+    <p>JavaScriptを有効にして最新情報をご確認ください。</p>
+  </noscript>
 
   <p style="margin-top:12px;">
     <a href="news.html" style="text-decoration:underline;">
@@ -294,6 +288,62 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    // トップページの「最新情報」は data/events.json を正本として描画する。
+    // 表示順は events.json の配列順をそのまま採用し、先頭 MAX_ITEMS 件だけを表示する
+    // （従来ハードコードされていた表示件数 = 2件を踏襲）。
+    (function () {
+      const MAX_ITEMS = 2;
+      const listEl = document.getElementById("latest-news-list");
+
+      function showMessage(text) {
+        listEl.innerHTML = "";
+        const li = document.createElement("li");
+        li.textContent = text;
+        listEl.appendChild(li);
+      }
+
+      function buildNewsItem(ev) {
+        const li = document.createElement("li");
+
+        const strong = document.createElement("strong");
+        const hasDetail = typeof ev.detailPage === "string" && ev.detailPage.trim() !== "";
+        if (hasDetail) {
+          const link = document.createElement("a");
+          link.href = ev.detailPage;
+          link.textContent = ev.title || "";
+          strong.appendChild(link);
+        } else {
+          strong.textContent = ev.title || "";
+        }
+        li.appendChild(strong);
+
+        li.appendChild(document.createElement("br"));
+        li.appendChild(document.createTextNode(ev.description || ""));
+
+        return li;
+      }
+
+      fetch("data/events.json")
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((events) => {
+          if (!Array.isArray(events) || events.length === 0) {
+            showMessage("現在、表示できる最新情報はありません。");
+            return;
+          }
+          listEl.innerHTML = "";
+          events.slice(0, MAX_ITEMS).forEach((ev) => listEl.appendChild(buildNewsItem(ev)));
+        })
+        .catch((err) => {
+          console.error("最新情報の読み込みに失敗しました:", err);
+          showMessage("最新情報を読み込めませんでした。");
+        });
+    })();
+  </script>
 
   <script>
     // 年号だけ自動で入れる（見栄え用）
